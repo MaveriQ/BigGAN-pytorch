@@ -1,7 +1,7 @@
 import torch
 import torchvision.datasets as dsets
 from torchvision import transforms
-
+import os
 
 class Data_Loader():
     def __init__(self, train, dataset, image_path, image_size, batch_size, shuf=True):
@@ -24,42 +24,33 @@ class Data_Loader():
             options.append(transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)))
         transform = transforms.Compose(options)
         return transform
-
-    def load_lsun(self, classes=['church_outdoor_train','classroom_train']):
-        transforms = self.transform(True, True, True, False)
-        dataset = dsets.LSUN(self.path, classes=classes, transform=transforms)
-        return dataset
     
-    def load_imagenet(self):
+    def load_target(self):
         transforms = self.transform(True, True, True, True)
-        dataset = dsets.ImageFolder(self.path+'/imagenet', transform=transforms)
+        dataset = dsets.ImageFolder(os.path.join(self.path,'/target/train'), transform=transforms)
         return dataset
 
-    def load_celeb(self):
+    def load_source(self):
         transforms = self.transform(True, True, True, True)
-        dataset = dsets.ImageFolder(self.path+'/CelebA', transform=transforms)
+        dataset = dsets.ImageFolder(os.path.join(self.path,'/source/train'), transform=transforms)
         return dataset
 
-    def load_off(self):
-        transforms = self.transform(True, True, True, False)
+    def load_all(self):
+        transforms = self.transform(True, True, True, True)
         dataset = dsets.ImageFolder(self.path, transform=transforms)
         return dataset
 
     def loader(self):
-        if self.dataset == 'lsun':
-            dataset = self.load_lsun()
-        elif self.dataset == 'imagenet':
-            dataset = self.load_imagenet()
-        elif self.dataset == 'celeb':
-            dataset = self.load_celeb()
-        elif self.dataset == 'off':
-            dataset = self.load_off()
+        if self.dataset == 'source':
+            dataset = self.load_all()
+        elif self.dataset == 'target':
+            dataset = self.load_all()
 
         print('dataset',len(dataset))
         loader = torch.utils.data.DataLoader(dataset=dataset,
                                               batch_size=self.batch,
                                               shuffle=self.shuf,
-                                              num_workers=2,
+                                              num_workers=4,
                                               drop_last=True)
         return loader
 

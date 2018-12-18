@@ -48,3 +48,7 @@ Thumbs.db
 repo/
 venv/
 runs/
+attn/
+samples/
+logs/
+results/

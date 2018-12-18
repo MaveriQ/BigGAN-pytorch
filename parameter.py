@@ -37,8 +37,8 @@ def get_parameters():
     parser.add_argument('--train', type=str2bool, default=True)
     parser.add_argument('--parallel', type=str2bool, default=False)
     parser.add_argument('--gpus', type=str, default='0', help='gpuids eg: 0,1,2,3  --parallel True  ')
-    parser.add_argument('--dataset', type=str, default='lsun', choices=['lsun', 'celeb','off'])
-    parser.add_argument('--use_tensorboard', type=str2bool, default=False)
+    parser.add_argument('--dataset', type=str, default='target', choices=['source', 'target'])
+    parser.add_argument('--use_tensorboard', type=str2bool, default=True)
 
     # Path
     parser.add_argument('--image_path', type=str, default='./data')
